@@ -1,11 +1,12 @@
 package com.springboot.ch05;
 
-import java.sql.Date;
 
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -31,7 +32,14 @@ public class Member {
 
     private String email;
 
-//    @Temporal(TemporalType.DATE)
-    @Column(name = "joinDate")
-    private Date joinDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "joinDate", columnDefinition = "DATE DEFAULT SYSDATE")
+    private Date  joinDate;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.joinDate == null) {
+            this.joinDate = new Date();
+        }
+    }
 }
