@@ -1,7 +1,9 @@
 package com.springboot.ch06;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -81,6 +83,59 @@ public class BlogApiControllerTest {
 		assertThat(articles.get(0).getTitle()).isEqualTo(title);
 		assertThat(articles.get(0).getContent()).isEqualTo(content);
 	}
+	
+	@DisplayName("findAllArticles : 모든 블로그글 조회")
+	@Test
+	public void findAllArticles() throws Exception {
+		//given
+		final String url ="/api/articles";
+		final String title = "제목1";
+		final String content = "내용1";
+		
+		blogRepository.save(Article.builder()
+				.title(title)
+				.content(content)
+				.build());
+	
+		//when
+		final ResultActions resultActions = mockMvc.perform(get(url)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		//then
+		resultActions.andExpect(status().isOk())
+					 .andExpect(jsonPath("$[0].content").value(content))
+					 .andExpect(jsonPath("$[0].title").value(title));
+	
+	}
+	
+	
+	@DisplayName("findArticle : 블로그글 조회")
+	@Test
+	public void findArticle() throws Exception{
+		//given
+		final String url = "/api/articles/{id}";
+		final String title = "제목2";
+		final String content = "내용2";
+		
+		Article savedArticle = blogRepository.save(Article.builder()
+				.title(title)
+				.content(content)
+				.build());
+		
+		//when
+		final ResultActions resultActions = mockMvc.perform(get(url, savedArticle.getId()));
+		
+		//then
+		resultActions
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.content").value(content))
+				.andExpect(jsonPath("$.title").value(title));
+				
+				
+		
+	}
+	
+	
 	
 	
 }

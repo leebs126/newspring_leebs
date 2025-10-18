@@ -18,7 +18,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
   sql:
-    init:
-      mode: never	
+   init:
+     mode: always       # 💡 항상 data.sql 실행
+     data-locations: classpath:data.sql  # (선택) data.sql의 위치 지정
