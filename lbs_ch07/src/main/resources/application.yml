@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: lbs_ch07
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe   # 포트/서비스명 맞게 수정하세요
+    username: C##user1
+    password: 1234
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none      # create / update / validate / none
+      naming:
+         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl 
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+   init:
+     mode: always       # 💡 항상 data.sql 실행  //자동 실행 중지 never, 
+     data-locations: classpath:data.sql  # (선택) data.sql의 위치 지정
+
+  thymeleaf:
+   cache: false
+   prefix: classpath:/templates/
+   suffix: .html
+   mode: HTML
+   encoding: UTF-8
+
+#  devtools:
+#   restart:
+#    enabled: true
+#   livereload:
+#    enabled: true 
