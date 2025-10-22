@@ -1,5 +1,6 @@
 package com.springboot.ch07.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -23,9 +24,11 @@ public class BlogViewController {
 	
 	@GetMapping("/articles")
 	public String getArticles(Model model) {
-		List<ArticleListViewResponse> articles = blogService.findAll().stream()
-				.map(ArticleListViewResponse :: new)
-				.toList();
+	    List<ArticleListViewResponse> articles = blogService.findAll().stream()
+	    		.map(ArticleListViewResponse::new)
+		        .sorted(Comparator.comparing(ArticleListViewResponse::getId).reversed()) // 🔽 id 기준 내림차순
+		        .toList();
+
 		
 		model.addAttribute("articles", articles);
 		return "articleList";
