@@ -1,6 +1,6 @@
 spring:
   application:
-    name: lbs_ch08
+    name: lbs_ch09
 
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
